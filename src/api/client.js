@@ -36,12 +36,17 @@ client.logout = () =>
   });
 
 // Intercepts response
-client.interceptors.response.use(({ data: { ok, ...result } }) => {
-  if (!ok) {
-    throw result.error;
-  }
-  return result;
-});
+client.interceptors.response.use(
+  ({ data: { ok, ...result } }) => {
+    if (!ok) {
+      return Promise.reject(result.error);
+    }
+    return Promise.resolve(result);
+  },
+  error => {
+    return Promise.reject(error);
+  },
+);
 
 // Configure client
 export const configureClient = ({ token }) => {
