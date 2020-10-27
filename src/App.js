@@ -1,62 +1,24 @@
-import { useState, useEffect, useRef, createRef } from 'react';
-import { Switch, Route, Redirect, Link, useHistory } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import {
+  Switch,
+  Route,
+  Redirect,
+  Link,
+  useHistory,
+  useLocation,
+} from 'react-router-dom';
 
-import PrivateRoute from './components/auth/PrivateRoute';
+import { PrivateRoute, LoginPage } from './components/auth';
+import { getAdverts, getAdvert, getTags, createAdvert } from './api/adverts';
+import { logout } from './api/auth';
 
-const Login = ({ onLoginSuccess }) => {
-  const [auth, setAuth] = useState({ email: '', password: '' });
+const { REACT_APP_API_HOST: host } = process.env;
 
-  const login = ev => {
-    ev.preventDefault();
-
-    fetch('http://localhost:5000/apiv1/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(auth),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(onLoginSuccess);
-  };
-
-  return (
-    <form onSubmit={login}>
-      <input
-        value={auth.email}
-        name="email"
-        onChange={ev =>
-          setAuth(prevAuth => ({
-            ...prevAuth,
-            [ev.target.name]: ev.target.value,
-          }))
-        }
-      ></input>
-      <input
-        type="password"
-        name="password"
-        value={auth.password}
-        onChange={ev =>
-          setAuth(prevAuth => ({
-            ...prevAuth,
-            [ev.target.name]: ev.target.value,
-          }))
-        }
-      ></input>
-      <button type="submit">Login</button>
-    </form>
-  );
-};
-
-const AdvertsList = ({ token }) => {
+const AdvertsList = () => {
   const [adverts, setAdverts] = useState(null);
   useEffect(() => {
-    const headers = {};
-    headers['Authorization'] = `Bearer ${token}`;
-    fetch('http://localhost:5000/apiv1/adverts', { headers })
-      .then(response => response.json())
-      .then(({ result }) => setAdverts(result.rows));
-  }, [token]);
+    getAdverts().then(({ result }) => setAdverts(result.rows));
+  }, []);
 
   return adverts && adverts.length ? (
     <ul>
@@ -73,24 +35,20 @@ const AdvertsList = ({ token }) => {
   );
 };
 
-const AdvertDetail = ({ token, match }) => {
+const AdvertDetail = ({ match }) => {
   const {
     params: { id },
   } = match;
   const [advert, setAdvert] = useState(null);
   useEffect(() => {
-    const headers = {};
-    headers['Authorization'] = `Bearer ${token}`;
-    fetch(`http://localhost:5000/apiv1/adverts/${id}`, { headers })
-      .then(response => response.json())
-      .then(({ result }) => setAdvert(result));
-  }, [token, id]);
+    getAdvert(id).then(({ result }) => setAdvert(result));
+  }, [id]);
 
   return advert ? (
     <div>
       <h1>{advert.name}</h1>
       <img
-        src={`http://localhost:5000/${advert.photo}`}
+        src={`${host}/${advert.photo}`}
         alt={advert.name}
         style={{ width: 400, height: 400, objectFit: 'contain' }}
       />
@@ -100,7 +58,7 @@ const AdvertDetail = ({ token, match }) => {
   );
 };
 
-const NewAdvert = ({ token, onAdvertCreated }) => {
+const NewAdvert = ({ onAdvertCreated }) => {
   const [advert, setAdvert] = useState({ name: '', tags: [], photo: null });
   const fileInputRef = useRef(null);
 
@@ -115,17 +73,7 @@ const NewAdvert = ({ token, onAdvertCreated }) => {
     if (fileInputRef.current.files[0]) {
       formData.append('photo', fileInputRef.current.files[0]);
     }
-
-    const headers = {};
-    headers['Authorization'] = `Bearer ${token}`;
-
-    fetch('http://localhost:5000/apiv1/adverts', {
-      method: 'POST',
-      body: formData,
-      headers,
-    })
-      .then(response => response.json())
-      .then(({ result }) => onAdvertCreated(result));
+    createAdvert(formData).then(({ result }) => onAdvertCreated(result));
   };
 
   return (
@@ -167,7 +115,6 @@ const NewAdvert = ({ token, onAdvertCreated }) => {
             ),
           }))
         }
-        token={token}
       />
       {advert.photo && (
         <img
@@ -183,16 +130,12 @@ const NewAdvert = ({ token, onAdvertCreated }) => {
   );
 };
 
-const TagsSelect = ({ token, ...props }) => {
+const TagsSelect = props => {
   const [tags, setTags] = useState(null);
 
   useEffect(() => {
-    const headers = {};
-    headers['Authorization'] = `Bearer ${token}`;
-    fetch(`http://localhost:5000/apiv1/adverts/tags`, { headers })
-      .then(response => response.json())
-      .then(({ result }) => setTags(result));
-  }, [token]);
+    getTags().then(({ result }) => setTags(result));
+  }, []);
 
   return tags ? (
     <select multiple {...props}>
@@ -207,39 +150,53 @@ const TagsSelect = ({ token, ...props }) => {
   );
 };
 
-function App() {
-  const [token, setToken] = useState(null);
+function App({ isInitiallyLogged = false, onLogin, onLogout }) {
+  const [isLogged, setIsLogged] = useState(isInitiallyLogged);
   const history = useHistory();
+  const location = useLocation();
 
   return (
     <div>
       <Link to="/">Adverts</Link>
       <Link to="/adverts/new">Create advert</Link>
+      {isLogged && (
+        <button
+          onClick={() => {
+            logout().then(() => {
+              setIsLogged(false);
+              onLogout();
+            });
+          }}
+        >
+          Logout
+        </button>
+      )}
       <Switch>
         <Route path="/" exact>
           <Redirect to="/adverts" />
         </Route>
         <Route path="/login" exact>
-          <Login
-            onLoginSuccess={result => {
-              setToken(result.token);
-              history.push('/');
+          <LoginPage
+            onLogin={(...args) => {
+              setIsLogged(true);
+              onLogin(...args);
+              const { from } = location.state || { from: { pathname: '/' } };
+              history.replace(from);
             }}
           />
         </Route>
-        <PrivateRoute path="/adverts" exact isLogged={!!token}>
-          <AdvertsList token={token} />
+        <PrivateRoute path="/adverts" exact isLogged={isLogged}>
+          <AdvertsList />
         </PrivateRoute>
-        <PrivateRoute path="/adverts/new" exact isLogged={!!token}>
+        <PrivateRoute path="/adverts/new" exact isLogged={isLogged}>
           <NewAdvert
-            token={token}
             onAdvertCreated={advert => history.push(`/adverts/${advert._id}`)}
           />
         </PrivateRoute>
-        <PrivateRoute path="/adverts/:id" exact isLogged={!!token}>
-          {routerProps => <AdvertDetail token={token} {...routerProps} />}
+        <PrivateRoute path="/adverts/:id" exact isLogged={isLogged}>
+          {routerProps => <AdvertDetail {...routerProps} />}
         </PrivateRoute>
-        <PrivateRoute isLogged={!!token}>NOT FOUND</PrivateRoute>
+        <PrivateRoute isLogged={isLogged}>NOT FOUND</PrivateRoute>
       </Switch>
     </div>
   );
