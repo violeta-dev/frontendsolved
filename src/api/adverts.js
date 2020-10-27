@@ -7,3 +7,5 @@ export const getAdvert = id => client.get(`/adverts/${id}`);
 export const getTags = () => client.get('/adverts/tags');
 
 export const createAdvert = advert => client.post(`/adverts`, advert);
+
+export const deleteAdvert = id => client.delete(`/adverts/${id}`);

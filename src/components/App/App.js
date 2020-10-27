@@ -8,9 +8,15 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { PrivateRoute, LoginPage } from './components/auth';
-import { getAdverts, getAdvert, getTags, createAdvert } from './api/adverts';
-import { logout } from './api/auth';
+import { PrivateRoute, LoginPage } from '../auth';
+import {
+  getAdverts,
+  getAdvert,
+  getTags,
+  createAdvert,
+  deleteAdvert,
+} from '../../api/adverts';
+import { logout } from '../../api/auth';
 
 const { REACT_APP_API_HOST: host } = process.env;
 
@@ -35,7 +41,7 @@ const AdvertsList = () => {
   );
 };
 
-const AdvertDetail = ({ match }) => {
+const AdvertDetail = ({ match, history }) => {
   const {
     params: { id },
   } = match;
@@ -52,6 +58,9 @@ const AdvertDetail = ({ match }) => {
         alt={advert.name}
         style={{ width: 400, height: 400, objectFit: 'contain' }}
       />
+      <button onClick={() => deleteAdvert(id).then(() => history.push('/'))}>
+        Delete
+      </button>
     </div>
   ) : (
     <div>Not found</div>
