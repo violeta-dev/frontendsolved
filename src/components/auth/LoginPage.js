@@ -1,73 +1,68 @@
 import React from 'react';
 import T from 'prop-types';
+import { Alert, Button, Checkbox, Col, Input, Row, Typography } from 'antd';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import { login } from '../../api/auth';
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Col,
-  Form,
-  Input,
-  Row,
-  Typography,
-} from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
-const formLayout = {
-  labelCol: {
-    span: 6,
-  },
-  wrapperCol: {
-    span: 18,
-  },
-};
+class LoginForm extends React.Component {
+  state = {
+    email: '',
+    password: '',
+    remember: false,
+  };
 
-const fieldlLayout = {
-  wrapperCol: {
-    span: 24,
-  },
-};
+  canSubmit = () => {
+    const { email, password } = this.state;
+    return !!(email && password);
+  };
 
-const LoginForm = ({ onFinish }) => (
-  <Form
-    {...formLayout}
-    initialValues={{
-      email: '',
-      password: '',
-      remember: false,
-    }}
-    onFinish={onFinish}
-  >
-    <Form.Item
-      name="email"
-      rules={[{ required: true, message: 'Please, enter your Email!' }]}
-      {...fieldlLayout}
-    >
-      <Input prefix={<MailOutlined />} placeholder="Email" />
-    </Form.Item>
-    <Form.Item
-      name="password"
-      rules={[{ required: true, message: 'Please, enter your Password!' }]}
-      {...fieldlLayout}
-    >
-      <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-    </Form.Item>
-    <Form.Item name="remember" valuePropName="checked" {...fieldlLayout}>
-      <Checkbox>Remember me</Checkbox>
-    </Form.Item>
-    <Form.Item {...fieldlLayout}>
-      <Button type="primary" htmlType="submit" block>
-        Log In
-      </Button>
-    </Form.Item>
-  </Form>
-);
+  handleEmailChange = ev => this.setState({ email: ev.target.value });
+  handlePaswordChange = ev => this.setState({ password: ev.target.value });
+  handleRememberChange = ev => this.setState({ remember: ev.target.checked });
+
+  handleSubmit = ev => {
+    const { onSubmit } = this.props;
+    ev.preventDefault();
+    onSubmit(this.state);
+  };
+
+  render() {
+    const { email, password, remember } = this.state;
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <Input
+          prefix={<MailOutlined />}
+          placeholder="Email"
+          onChange={this.handleEmailChange}
+          value={email}
+        />
+        <Input.Password
+          prefix={<LockOutlined />}
+          placeholder="Password"
+          onChange={this.handlePaswordChange}
+          value={password}
+        />
+        <Checkbox onChange={this.handleRememberChange} checked={remember}>
+          Remember me
+        </Checkbox>
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          disabled={!this.canSubmit()}
+        >
+          Log In
+        </Button>
+      </form>
+    );
+  }
+}
 
 LoginForm.propTypes = {
-  onFinish: T.func,
+  onSubmit: T.func.isRequired,
 };
 
 class LoginPage extends React.Component {
@@ -75,7 +70,7 @@ class LoginPage extends React.Component {
     error: null,
   };
 
-  handleFinish = ({ remember, ...credentials }) => {
+  handleSubmit = ({ remember, ...credentials }) => {
     const { onLogin } = this.props;
     this.resetError();
     login(credentials)
@@ -93,9 +88,9 @@ class LoginPage extends React.Component {
     const { error } = this.state;
     return (
       <Row>
-        <Col span={6} offset={9} style={{ textAlign: 'center' }}>
+        <Col span={6} offset={9} style={{ textAlign: 'center', marginTop: 64 }}>
           <Title>Log In</Title>
-          <LoginForm onFinish={this.handleFinish} />
+          <LoginForm onSubmit={this.handleSubmit} />
           {error && (
             <Alert
               afterClose={this.resetError}

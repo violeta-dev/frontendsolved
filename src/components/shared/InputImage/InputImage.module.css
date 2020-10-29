@@ -1,0 +1,33 @@
+.container {
+  cursor: pointer;
+  position: relative;
+  width: 200px;
+}
+
+.image img {
+  object-fit: contain;
+}
+
+.overlay {
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: opacity 0.2s, width 0.2s, height 0.2s;
+}
+
+.button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.container:hover .overlay {
+  height: 100%;
+  width: 100%;
+  opacity: 1;
+}
