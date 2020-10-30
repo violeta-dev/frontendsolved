@@ -1,21 +1,12 @@
 import React from 'react';
 import T from 'prop-types';
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Col,
-  Input,
-  InputNumber,
-  Row,
-  Typography,
-} from 'antd';
+import { Alert, Button, Checkbox, Input, InputNumber } from 'antd';
 
+import { createAdvert } from '../../api/adverts';
+import Layout from '../layout';
 import { InputImage } from '../shared';
 import TagsSelect from './TagsSelect';
-import { createAdvert } from '../../api/adverts';
-
-const { Title } = Typography;
+import * as numbers from '../../utils/numbers';
 
 class NewAdvertForm extends React.Component {
   state = {
@@ -70,10 +61,7 @@ class NewAdvertForm extends React.Component {
           value={name}
         />
         <InputNumber
-          formatter={value =>
-            `€ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-          }
-          parser={value => value.replace(/€\s?|(\.*)/g, '')}
+          {...numbers}
           onChange={this.handlePriceChange}
           value={price}
         />
@@ -111,25 +99,18 @@ class NewAdvertPage extends React.Component {
   render() {
     const { error } = this.state;
     return (
-      <Row>
-        <Col
-          span={12}
-          offset={6}
-          style={{ textAlign: 'center', marginTop: 64 }}
-        >
-          <Title>New Advert</Title>
-          <NewAdvertForm onSubmit={this.handleSubmit} />
-          {error && (
-            <Alert
-              afterClose={this.resetError}
-              closable
-              message={error}
-              showIcon
-              type="error"
-            />
-          )}
-        </Col>
-      </Row>
+      <Layout title="New advert">
+        <NewAdvertForm onSubmit={this.handleSubmit} />
+        {error && (
+          <Alert
+            afterClose={this.resetError}
+            closable
+            message={error}
+            showIcon
+            type="error"
+          />
+        )}
+      </Layout>
     );
   }
 }

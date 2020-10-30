@@ -44,6 +44,9 @@ client.interceptors.response.use(
     return Promise.resolve(result);
   },
   error => {
+    if (error.response) {
+      return Promise.reject(error.response.data.error);
+    }
     return Promise.reject(error);
   },
 );

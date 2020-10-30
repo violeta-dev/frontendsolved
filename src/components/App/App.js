@@ -18,53 +18,37 @@ function App({ isInitiallyLogged = false, onLogin, onLogout }) {
   const location = useLocation();
 
   return (
-    <div>
-      <Link to="/">Adverts</Link>
-      <Link to="/adverts/new">Create advert</Link>
-      {isLogged && (
-        <button
-          onClick={() => {
-            logout().then(() => {
-              setIsLogged(false);
-              onLogout();
-            });
+    <Switch>
+      <Route path="/" exact>
+        <Redirect to="/adverts" />
+      </Route>
+      <Route path="/login" exact>
+        <LoginPage
+          onLogin={(...args) => {
+            setIsLogged(true);
+            onLogin(...args);
+            const { from } = location.state || { from: { pathname: '/' } };
+            history.replace(from);
           }}
-        >
-          Logout
-        </button>
-      )}
-      <Switch>
-        <Route path="/" exact>
-          <Redirect to="/adverts" />
-        </Route>
-        <Route path="/login" exact>
-          <LoginPage
-            onLogin={(...args) => {
-              setIsLogged(true);
-              onLogin(...args);
-              const { from } = location.state || { from: { pathname: '/' } };
-              history.replace(from);
-            }}
-          />
-        </Route>
-        <PrivateRoute path="/adverts" exact isLogged={isLogged}>
-          <AdvertsPage />
-        </PrivateRoute>
-        <PrivateRoute
-          path="/adverts/new"
-          exact
-          component={NewAdvertPage}
-          isLogged={isLogged}
         />
-        <PrivateRoute
-          path="/adverts/:id"
-          exact
-          component={AdvertPage}
-          isLogged={isLogged}
-        />
-        <PrivateRoute isLogged={isLogged}>NOT FOUND</PrivateRoute>
-      </Switch>
-    </div>
+      </Route>
+      <PrivateRoute path="/adverts" exact isLogged={isLogged}>
+        <AdvertsPage />
+      </PrivateRoute>
+      <PrivateRoute
+        path="/adverts/new"
+        exact
+        component={NewAdvertPage}
+        isLogged={isLogged}
+      />
+      <PrivateRoute
+        path="/adverts/:id"
+        exact
+        component={AdvertPage}
+        isLogged={isLogged}
+      />
+      <PrivateRoute isLogged={isLogged}>NOT FOUND</PrivateRoute>
+    </Switch>
   );
 }
 

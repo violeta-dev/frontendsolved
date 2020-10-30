@@ -1,0 +1,26 @@
+.layout {
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  margin-top: 64px;
+}
+
+.row {
+  flex: 1;
+}
+
+.col {
+  border-left: 1px solid #f0f0f0;
+  border-right: 1px solid #f0f0f0;
+  padding: 16px;
+}
+
+.footer {
+  background-color: #000;
+  color: hsla(0, 0%, 100%, 0.4);
+  text-align: center;
+}

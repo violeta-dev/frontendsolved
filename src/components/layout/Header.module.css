@@ -1,0 +1,18 @@
+.header {
+  background-color: inherit;
+  box-shadow: 0 2px 8px #f0f1f2;
+  display: flex;
+  line-height: unset;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+
+.nav {
+  flex: 1;
+}
+
+.button {
+  align-self: center;
+  margin-left: 24px;
+}

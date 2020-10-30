@@ -3,6 +3,7 @@ import T from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 import { getAdvert, deleteAdvert } from '../../api/adverts';
+import Layout from '../layout';
 
 const { REACT_APP_API_HOST: host } = process.env;
 
@@ -32,17 +33,19 @@ class AdvertsPage extends React.Component {
       return <Redirect to="/not-found" />;
     }
     return (
-      advert && (
-        <div>
-          <h1>{advert.name}</h1>
-          <img
-            src={`${host}/${advert.photo}`}
-            alt={advert.name}
-            style={{ width: 400, height: 400, objectFit: 'contain' }}
-          />
-          <button onClick={this.handleDeleteClick}>Delete</button>
-        </div>
-      )
+      <Layout title="Advert detail">
+        {advert && (
+          <div>
+            <h1>{advert.name}</h1>
+            <img
+              src={`${host}/${advert.photo}`}
+              alt={advert.name}
+              style={{ width: 400, height: 400, objectFit: 'contain' }}
+            />
+            <button onClick={this.handleDeleteClick}>Delete</button>
+          </div>
+        )}
+      </Layout>
     );
   }
 }
