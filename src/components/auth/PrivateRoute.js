@@ -1,6 +1,8 @@
 import T from 'prop-types';
 import { Route, Redirect, useLocation } from 'react-router-dom';
 
+import { AuthContextConsumer } from '../../contexts/auth';
+
 const PrivateRoute = ({ isLogged, ...props }) => {
   const location = useLocation();
   return isLogged ? (
@@ -13,4 +15,10 @@ PrivateRoute.propTypes = {
   isLogged: T.bool.isRequired,
 };
 
-export default PrivateRoute;
+const ConnectedToAuthPrivateRoute = props => (
+  <AuthContextConsumer>
+    {({ isLogged }) => <PrivateRoute isLogged={isLogged} {...props} />}
+  </AuthContextConsumer>
+);
+
+export default ConnectedToAuthPrivateRoute;

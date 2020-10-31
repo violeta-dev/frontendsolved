@@ -9,7 +9,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 
 const { REACT_APP_API_HOST: host } = process.env;
 
-class AdvertsPage extends React.Component {
+class AdvertPage extends React.Component {
   // NOTA: gestionar error en la busqueda o que no traiga nada como un not-found
   state = {
     advert: null,
@@ -67,9 +67,9 @@ class AdvertsPage extends React.Component {
   }
 }
 
-AdvertsPage.propTypes = {
+AdvertPage.propTypes = {
   match: T.shape({ params: T.shape({ id: T.string.isRequired }).isRequired })
     .isRequired,
 };
 
-export default AdvertsPage;
+export default AdvertPage;

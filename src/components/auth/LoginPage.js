@@ -71,11 +71,13 @@ class LoginPage extends React.Component {
   };
 
   handleSubmit = ({ remember, ...credentials }) => {
-    const { onLogin } = this.props;
+    const { onLogin, location, history } = this.props;
     this.resetError();
     login(credentials)
       .then(auth => {
         onLogin(auth, remember);
+        const { from } = location.state || { from: { pathname: '/' } };
+        history.replace(from);
       })
       .catch(error => {
         this.setState({ error });
@@ -108,6 +110,10 @@ class LoginPage extends React.Component {
 
 LoginPage.propTypes = {
   onLogin: T.func.isRequired,
+  history: T.shape({ replace: T.func.isRequired }).isRequired,
+  location: T.shape({
+    state: T.shape({ from: T.shape({ pathname: T.string }) }),
+  }).isRequired,
 };
 
 export default LoginPage;
