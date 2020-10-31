@@ -75,9 +75,10 @@ class LoginPage extends React.Component {
     this.resetError();
     login(credentials)
       .then(auth => {
-        onLogin(auth, remember);
-        const { from } = location.state || { from: { pathname: '/' } };
-        history.replace(from);
+        onLogin(auth, remember).then(() => {
+          const { from } = location.state || { from: { pathname: '/' } };
+          history.replace(from);
+        });
       })
       .catch(error => {
         this.setState({ error });

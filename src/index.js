@@ -15,17 +15,7 @@ configureClient(auth);
 
 ReactDOM.render(
   <BrowserRouter>
-    <App
-      onLogin={(auth, remember) => {
-        if (remember) {
-          storage.set('auth', auth);
-        }
-      }}
-      onLogout={() => {
-        storage.remove('auth');
-      }}
-      isInitiallyLogged={!!auth.token}
-    />
+    <App isInitiallyLogged={!!auth.token} />
   </BrowserRouter>,
   document.getElementById('root'),
 );

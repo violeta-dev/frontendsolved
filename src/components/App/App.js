@@ -5,20 +5,28 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { PrivateRoute, LoginPage } from '../auth';
 import { AdvertPage, AdvertsPage, NewAdvertPage } from '../adverts';
 import { AuthContextProvider } from '../../contexts/auth';
+import storage from '../../utils/storage';
 
 class App extends React.Component {
   state = {
     isLogged: this.props.isInitiallyLogged,
   };
 
-  handleLogin = (...args) => {
-    const { onLogin } = this.props;
-    this.setState({ isLogged: true }, () => onLogin(...args));
+  handleLogin = (auth, remember) => {
+    return new Promise(resolve => {
+      this.setState({ isLogged: true }, () => {
+        if (remember) {
+          storage.set('auth', auth);
+        }
+        resolve();
+      });
+    });
   };
 
   handleLogout = () => {
-    const { onLogout } = this.props;
-    this.setState({ isLogged: false }, onLogout);
+    this.setState({ isLogged: false }, () => {
+      storage.remove('auth');
+    });
   };
 
   render() {
@@ -54,8 +62,6 @@ class App extends React.Component {
 
 App.propTypes = {
   isInitiallyLogged: T.bool,
-  onLogin: T.func.isRequired,
-  onLogout: T.func.isRequired,
 };
 
 export default App;
