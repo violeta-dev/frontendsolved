@@ -2,8 +2,10 @@ import React from 'react';
 import T from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
-import { getAdvert, deleteAdvert } from '../../api/adverts';
-import Layout from '../layout';
+import { getAdvert, deleteAdvert } from '../../../api/adverts';
+import Layout from '../../layout';
+import ConfirmationButton from '../../shared/ConfirmationButton';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const { REACT_APP_API_HOST: host } = process.env;
 
@@ -42,7 +44,22 @@ class AdvertsPage extends React.Component {
               alt={advert.name}
               style={{ width: 400, height: 400, objectFit: 'contain' }}
             />
-            <button onClick={this.handleDeleteClick}>Delete</button>
+            <ConfirmationButton
+              danger
+              icon={<DeleteOutlined />}
+              confirmationProps={{
+                title: 'Delete advert?',
+                content: 'Are you sure you want to delete this advert?',
+                okText: 'Yes',
+                cancelText: 'No',
+                okButtonProps: {
+                  danger: true,
+                },
+              }}
+              onConfirm={this.handleDeleteClick}
+            >
+              Delete
+            </ConfirmationButton>
           </div>
         )}
       </Layout>

@@ -3,12 +3,7 @@ import T from 'prop-types';
 import { Button, Input, Slider, Radio } from 'antd';
 
 import TagsSelect from '../TagsSelect';
-
-const saleOptions = {
-  sell: { label: 'Sell', value: 'sell' },
-  buy: { label: 'Buy', value: 'buy' },
-  all: { label: 'All', value: 'all' },
-};
+import { saleOptions, MIN_PRICE, MAX_PRICE } from '../definitions';
 
 export const defaultFilters = {
   name: '',
@@ -22,13 +17,10 @@ class FiltersForm extends React.Component {
     ...this.props.initialFilters,
   };
 
-  sliderRef = React.createRef(null);
-
   handleNameChange = ev => this.setState({ name: ev.target.value });
   handlePriceChange = price => {
-    const { current: slider } = this.sliderRef;
     const [min, max] = price;
-    if (min === slider.props.min && max === slider.props.max) {
+    if (min === MIN_PRICE && max === MAX_PRICE) {
       return this.setState({ price: [] });
     }
     this.setState({ price });
@@ -54,10 +46,9 @@ class FiltersForm extends React.Component {
         <Slider
           range
           defaultValue={price}
-          min={0}
-          max={10000}
+          min={MIN_PRICE}
+          max={MAX_PRICE}
           onChange={this.handlePriceChange}
-          ref={this.sliderRef}
         />
         <TagsSelect onChange={this.handleTagsChange} value={tags} />
         <Radio.Group

@@ -3,14 +3,12 @@ import {
   Switch,
   Route,
   Redirect,
-  Link,
   useHistory,
   useLocation,
 } from 'react-router-dom';
 
 import { PrivateRoute, LoginPage } from '../auth';
 import { AdvertPage, AdvertsPage, NewAdvertPage } from '../adverts';
-import { logout } from '../../api/auth';
 
 function App({ isInitiallyLogged = false, onLogin, onLogout }) {
   const [isLogged, setIsLogged] = useState(isInitiallyLogged);
