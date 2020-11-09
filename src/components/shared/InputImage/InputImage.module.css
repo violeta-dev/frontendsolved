@@ -1,7 +1,8 @@
 .container {
+  border: 1px solid #d9d9d9;
   cursor: pointer;
+  display: inline-block;
   position: relative;
-  width: 200px;
 }
 
 .image img {

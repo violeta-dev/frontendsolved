@@ -1,12 +1,14 @@
 import React from 'react';
 import T from 'prop-types';
-import { Button, Radio, Input, InputNumber } from 'antd';
+import { Button, Radio, Input, InputNumber, Row, Col } from 'antd';
 
-import { InputImage } from '../../shared';
 import TagsSelect from '../TagsSelect';
+import { FormField, InputImage } from '../../shared';
 import * as numbers from '../../../utils/numbers';
 
 import { saleOptions, MIN_PRICE, MAX_PRICE } from '../definitions';
+
+import styles from './NewAdvertForm.module.css';
 
 class NewAdvertForm extends React.Component {
   state = {
@@ -57,28 +59,53 @@ class NewAdvertForm extends React.Component {
     const { name, price, tags, sale } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
-        <Input
-          placeholder="Name"
-          onChange={this.handleNameChange}
-          value={name}
-        />
-        <InputNumber
-          {...numbers}
-          min={MIN_PRICE}
-          max={MAX_PRICE}
-          onChange={this.handlePriceChange}
-          value={price}
-        />
-        <TagsSelect onChange={this.handleTagsChange} value={tags} />
-        <Radio.Group
-          options={[saleOptions.sell, saleOptions.buy]}
-          onChange={this.handleSaleChange}
-          value={sale}
-        />
-        <InputImage type="file" onChange={this.handlePhotoChange} />
-        <Button type="primary" htmlType="submit" disabled={!this.canSubmit()}>
-          Up!
-        </Button>
+        <Row className={styles.form}>
+          <Col span={11}>
+            <FormField label="Name">
+              <Input
+                placeholder="Name"
+                onChange={this.handleNameChange}
+                value={name}
+              />
+            </FormField>
+            <FormField label="Price">
+              <InputNumber
+                {...numbers}
+                className={styles.price}
+                min={MIN_PRICE}
+                max={MAX_PRICE}
+                onChange={this.handlePriceChange}
+                value={price}
+              />
+            </FormField>
+          </Col>
+          <Col span={11} offset={2}>
+            <FormField label="Tags">
+              <TagsSelect onChange={this.handleTagsChange} value={tags} />
+            </FormField>
+            <FormField label="Type">
+              <Radio.Group
+                options={[saleOptions.sell, saleOptions.buy]}
+                onChange={this.handleSaleChange}
+                value={sale}
+              />
+            </FormField>
+          </Col>
+          <Col span={24}>
+            <FormField label="Photo">
+              <InputImage type="file" onChange={this.handlePhotoChange} />
+            </FormField>
+            <Button
+              className={styles.button}
+              type="primary"
+              htmlType="submit"
+              disabled={!this.canSubmit()}
+              block
+            >
+              Up!
+            </Button>
+          </Col>
+        </Row>
       </form>
     );
   }

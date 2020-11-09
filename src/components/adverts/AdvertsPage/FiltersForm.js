@@ -3,6 +3,7 @@ import T from 'prop-types';
 import { Button, Input, Slider, Radio, Row, Col } from 'antd';
 
 import TagsSelect from '../TagsSelect';
+import FormField from '../../shared/FormField';
 import { saleOptions, MIN_PRICE, MAX_PRICE } from '../definitions';
 import styles from './FiltersForm.module.css';
 
@@ -12,13 +13,6 @@ export const defaultFilters = {
   price: [],
   tags: [],
 };
-
-const Field = ({ children, label, ...props }) => (
-  <div className={styles.field} {...props}>
-    <span className={styles.label}>{label}</span>
-    {children}
-  </div>
-);
 
 class FiltersForm extends React.Component {
   state = {
@@ -50,14 +44,14 @@ class FiltersForm extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <Row className={styles.form}>
           <Col span={11}>
-            <Field label="By name">
+            <FormField label="By name">
               <Input
                 placeholder="Name"
                 onChange={this.handleNameChange}
                 value={name}
               />
-            </Field>
-            <Field
+            </FormField>
+            <FormField
               label={
                 <>
                   By price
@@ -74,19 +68,19 @@ class FiltersForm extends React.Component {
                 max={MAX_PRICE}
                 onChange={this.handlePriceChange}
               />
-            </Field>
+            </FormField>
           </Col>
           <Col span={11} offset={2}>
-            <Field label="By tags">
+            <FormField label="By tags">
               <TagsSelect onChange={this.handleTagsChange} value={tags} />
-            </Field>
-            <Field label="By type">
+            </FormField>
+            <FormField label="By type">
               <Radio.Group
                 options={Object.values(saleOptions)}
                 onChange={this.handleSaleChange}
                 value={sale}
               />
-            </Field>
+            </FormField>
           </Col>
           <Col span={24}>
             <Button

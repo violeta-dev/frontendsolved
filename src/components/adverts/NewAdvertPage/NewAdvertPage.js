@@ -1,6 +1,6 @@
 import React from 'react';
 import T from 'prop-types';
-import { Alert } from 'antd';
+import { Alert, Divider } from 'antd';
 
 import { createAdvert } from '../../../api/adverts';
 import Layout from '../../layout';
@@ -22,6 +22,7 @@ class NewAdvertPage extends React.Component {
     const { error } = this.state;
     return (
       <Layout title="New advert">
+        <Divider>Create an advert</Divider>
         <NewAdvertForm onSubmit={this.handleSubmit} />
         {error && (
           <Alert

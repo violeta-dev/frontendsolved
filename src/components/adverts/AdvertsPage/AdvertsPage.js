@@ -75,7 +75,7 @@ class AdvertsPage extends React.Component {
           <span>Refine your search</span>
         ) : (
           <Link to="/adverts/new">
-            <Button type="primary">Create now</Button>
+            <Button type="primary">Create the first one</Button>
           </Link>
         )}
       </Empty>
