@@ -8,14 +8,14 @@ import './index.css';
 import App from './components/App';
 
 // Read token from storage
-const auth = storage.get('auth') || {};
+const { token } = storage.get('auth') || { token: null };
 
 // Configure api client
-configureClient(auth);
+configureClient(token);
 
 ReactDOM.render(
   <BrowserRouter>
-    <App isInitiallyLogged={!!auth.token} />
+    <App isInitiallyLogged={!!token} />
   </BrowserRouter>,
   document.getElementById('root'),
 );

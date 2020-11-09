@@ -52,7 +52,7 @@ client.interceptors.response.use(
 );
 
 // Configure client
-export const configureClient = ({ token }) => {
+export const configureClient = token => {
   if (token) {
     setAuthorizationHeader(token);
   }

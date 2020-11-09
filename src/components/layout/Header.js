@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { Layout as DesignLayout, Space } from 'antd';
 
 import styles from './Header.module.css';
-import LogoutButton from '../auth/LogoutButton';
+import { LogoutButton } from '../auth';
 
 const { Header: DesignHeader } = DesignLayout;
+
 const Header = () => (
   <DesignHeader className={styles.header}>
     <Space size="large" className={styles.nav}>

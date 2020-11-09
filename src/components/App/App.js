@@ -5,28 +5,18 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { PrivateRoute, LoginPage } from '../auth';
 import { AdvertPage, AdvertsPage, NewAdvertPage } from '../adverts';
 import { AuthContextProvider } from '../../contexts/auth';
-import storage from '../../utils/storage';
 
 class App extends React.Component {
   state = {
     isLogged: this.props.isInitiallyLogged,
   };
 
-  handleLogin = (auth, remember) => {
-    return new Promise(resolve => {
-      this.setState({ isLogged: true }, () => {
-        if (remember) {
-          storage.set('auth', auth);
-        }
-        resolve();
-      });
-    });
+  handleLogin = cb => {
+    this.setState({ isLogged: true }, cb);
   };
 
   handleLogout = () => {
-    this.setState({ isLogged: false }, () => {
-      storage.remove('auth');
-    });
+    this.setState({ isLogged: false });
   };
 
   render() {
