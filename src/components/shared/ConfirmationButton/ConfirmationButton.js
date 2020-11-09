@@ -17,7 +17,7 @@ class ConfirmationButton extends React.Component {
   };
 
   render() {
-    const { confirmationProps, ...buttonProps } = this.props;
+    const { confirmationProps, onConfirm, ...buttonProps } = this.props;
     const { visible } = this.state;
 
     const { content } = confirmationProps;

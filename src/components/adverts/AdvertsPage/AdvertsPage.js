@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Empty, Button, Spin, List } from 'antd';
+import { Empty, Button, Spin, List, Divider } from 'antd';
 
 import storage from '../../../utils/storage';
 import { getAdverts } from '../../../api/adverts';
@@ -135,7 +135,9 @@ class AdvertsPage extends React.Component {
     const { filters } = this.state;
     return (
       <Layout title="Adverts list">
+        <Divider>Filter your adverts</Divider>
         <FiltersForm initialFilters={filters} onSubmit={this.handleSubmit} />
+        <Divider>Adverts</Divider>
         {this.renderAdverts()}
       </Layout>
     );

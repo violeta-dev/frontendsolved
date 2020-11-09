@@ -34,7 +34,7 @@ class LoginPage extends React.Component {
     const { error } = this.state;
     return (
       <Row>
-        <Col span={9} offset={6} style={{ marginTop: 64 }}>
+        <Col span={8} offset={8} style={{ marginTop: 64 }}>
           <Title style={{ textAlign: 'center' }}>Log In</Title>
           <LoginForm onSubmit={this.handleSubmit} />
           {error && (
@@ -44,6 +44,7 @@ class LoginPage extends React.Component {
               message={error}
               showIcon
               type="error"
+              style={{ marginTop: 24 }}
             />
           )}
         </Col>

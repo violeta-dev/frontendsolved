@@ -10,8 +10,6 @@ class TagsSelect extends React.Component {
     tags: null,
   };
 
-  ref = React.createRef(null);
-
   componentDidMount() {
     getTags().then(({ result: tags }) => this.setState({ tags }));
   }
@@ -23,9 +21,8 @@ class TagsSelect extends React.Component {
         allowClear
         disabled={!tags}
         mode="multiple"
-        placeholder="Please select a tag"
+        placeholder="Select tags"
         style={{ width: '100%' }}
-        ref={this.ref}
         {...this.props}
       >
         {tags && tags.map(tag => <Option key={tag}>{tag}</Option>)}

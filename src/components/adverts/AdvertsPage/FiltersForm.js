@@ -1,9 +1,10 @@
 import React from 'react';
 import T from 'prop-types';
-import { Button, Input, Slider, Radio } from 'antd';
+import { Button, Input, Slider, Radio, Row, Col } from 'antd';
 
 import TagsSelect from '../TagsSelect';
 import { saleOptions, MIN_PRICE, MAX_PRICE } from '../definitions';
+import styles from './FiltersForm.module.css';
 
 export const defaultFilters = {
   name: '',
@@ -11,6 +12,13 @@ export const defaultFilters = {
   price: [],
   tags: [],
 };
+
+const Field = ({ children, label, ...props }) => (
+  <div className={styles.field} {...props}>
+    <span className={styles.label}>{label}</span>
+    {children}
+  </div>
+);
 
 class FiltersForm extends React.Component {
   state = {
@@ -36,29 +44,61 @@ class FiltersForm extends React.Component {
 
   render() {
     const { name, price, tags, sale } = this.state;
+    const priceValue = price.length === 0 ? [MIN_PRICE, MAX_PRICE] : price;
+
     return (
       <form onSubmit={this.handleSubmit}>
-        <Input
-          placeholder="Name"
-          onChange={this.handleNameChange}
-          value={name}
-        />
-        <Slider
-          range
-          defaultValue={price}
-          min={MIN_PRICE}
-          max={MAX_PRICE}
-          onChange={this.handlePriceChange}
-        />
-        <TagsSelect onChange={this.handleTagsChange} value={tags} />
-        <Radio.Group
-          options={Object.values(saleOptions)}
-          onChange={this.handleSaleChange}
-          value={sale}
-        />
-        <Button type="primary" htmlType="submit">
-          Search
-        </Button>
+        <Row className={styles.form}>
+          <Col span={11}>
+            <Field label="By name">
+              <Input
+                placeholder="Name"
+                onChange={this.handleNameChange}
+                value={name}
+              />
+            </Field>
+            <Field
+              label={
+                <>
+                  By price
+                  <strong style={{ margin: '0 5px' }}>
+                    {priceValue.join(' - ')}
+                  </strong>
+                </>
+              }
+            >
+              <Slider
+                range
+                defaultValue={priceValue}
+                min={MIN_PRICE}
+                max={MAX_PRICE}
+                onChange={this.handlePriceChange}
+              />
+            </Field>
+          </Col>
+          <Col span={11} offset={2}>
+            <Field label="By tags">
+              <TagsSelect onChange={this.handleTagsChange} value={tags} />
+            </Field>
+            <Field label="By type">
+              <Radio.Group
+                options={Object.values(saleOptions)}
+                onChange={this.handleSaleChange}
+                value={sale}
+              />
+            </Field>
+          </Col>
+          <Col span={24}>
+            <Button
+              className={styles.button}
+              type="primary"
+              htmlType="submit"
+              block
+            >
+              Search
+            </Button>
+          </Col>
+        </Row>
       </form>
     );
   }
