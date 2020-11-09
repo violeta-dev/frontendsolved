@@ -1,11 +1,17 @@
 import client from './client';
 
+const { REACT_APP_API_HOST: host } = process.env;
+
 export const getAdverts = filters => {
   const queryString = filters && `?${filters}`;
   return client.get(`/adverts${queryString}`);
 };
 
-export const getAdvert = id => client.get(`/adverts/${id}`);
+export const getAdvert = id =>
+  client.get(`/adverts/${id}`).then(response => {
+    response.result.photoUrl = `${host}${response.result.photo}`;
+    return response;
+  });
 
 export const getTags = () => client.get('/adverts/tags');
 

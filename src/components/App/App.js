@@ -5,6 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { PrivateRoute, LoginPage } from '../auth';
 import { AdvertPage, AdvertsPage, NewAdvertPage } from '../adverts';
 import { AuthContextProvider } from '../../contexts/auth';
+import NotFoundPage from './NotFoundPage';
 
 class App extends React.Component {
   state = {
@@ -43,7 +44,7 @@ class App extends React.Component {
           </PrivateRoute>
           <PrivateRoute path="/adverts/new" exact component={NewAdvertPage} />
           <PrivateRoute path="/adverts/:id" exact component={AdvertPage} />
-          <PrivateRoute>NOT FOUND</PrivateRoute>
+          <PrivateRoute>{NotFoundPage}</PrivateRoute>
         </Switch>
       </AuthContextProvider>
     );

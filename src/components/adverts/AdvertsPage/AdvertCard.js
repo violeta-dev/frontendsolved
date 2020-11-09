@@ -1,40 +1,34 @@
 import T from 'prop-types';
-import { Card, Statistic, Tag, Row, Col, Divider, Typography } from 'antd';
+import { Card, Statistic, Row, Col, Divider, Typography } from 'antd';
 
 import { formatter } from '../../../utils/numbers';
+import Tags from '../Tags';
 
-const tagsColors = {
-  motor: 'green',
-  mobile: 'orange',
-  lifestyle: 'pink',
-  work: 'blue',
-};
+const getHeadStyle = sale =>
+  sale
+    ? {
+        backgroundColor: '#f6ffed',
+        color: '#52c41a',
+      }
+    : {
+        backgroundColor: '#fff7e6',
+        color: '#fa8c16',
+      };
 
-const AdvertCard = ({ name, price, sale, tags }) => {
-  const headStyle = {
-    backgroundColor: sale ? '#f6ffed' : '#fff7e6',
-    color: sale ? '#52c41a' : '#fa8c16',
-  };
-  return (
-    <Card title={sale ? 'Sell' : 'Buy'} headStyle={headStyle} hoverable>
-      <Row>
-        <Col span={12}>
-          <Typography.Title level={4}>{name}</Typography.Title>
-        </Col>
-        <Col span={12} style={{ textAlign: 'right' }}>
-          <Statistic title="Price" value={price} formatter={formatter} />
-        </Col>
-      </Row>
-      <Divider plain></Divider>
-      {tags.map(tag => (
-        <Tag key={tag} color={tagsColors[tag]}>
-          {tag}
-        </Tag>
-      ))}
-    </Card>
-  );
-};
-
+const AdvertCard = ({ name, price, sale, tags }) => (
+  <Card title={sale ? 'Sell' : 'Buy'} headStyle={getHeadStyle(sale)} hoverable>
+    <Row>
+      <Col span={12}>
+        <Typography.Title level={4}>{name}</Typography.Title>
+      </Col>
+      <Col span={12} style={{ textAlign: 'right' }}>
+        <Statistic title="Price" value={price} formatter={formatter} />
+      </Col>
+    </Row>
+    <Divider plain></Divider>
+    <Tags tags={tags}></Tags>
+  </Card>
+);
 AdvertCard.propTypes = {
   name: T.string.isRequired,
   price: T.number.isRequired,
