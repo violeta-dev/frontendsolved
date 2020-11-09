@@ -44,7 +44,12 @@ class App extends React.Component {
           </PrivateRoute>
           <PrivateRoute path="/adverts/new" exact component={NewAdvertPage} />
           <PrivateRoute path="/adverts/:id" exact component={AdvertPage} />
-          <PrivateRoute>{NotFoundPage}</PrivateRoute>
+          <Route path="/404" exact>
+            {NotFoundPage}
+          </Route>
+          <Route>
+            <Redirect to="/404" />
+          </Route>
         </Switch>
       </AuthContextProvider>
     );

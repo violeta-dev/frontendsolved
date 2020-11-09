@@ -54,9 +54,7 @@ class AdvertsPage extends React.Component {
     const { error } = this.state;
     return (
       <Empty
-        description={
-          <span style={{ color: '#ff4d4f' }}>{`Error: ${error}`}</span>
-        }
+        description={<span style={{ color: '#ff4d4f' }}>{`${error}`}</span>}
       >
         <Button type="primary" danger onClick={this.getAdverts}>
           Reload
