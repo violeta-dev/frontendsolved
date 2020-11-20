@@ -37,7 +37,7 @@ class InputImage extends React.Component {
     }
   };
 
-  handleUploadClick = () => {
+  handleClick = () => {
     const { src } = this.state;
     const { current: fileInput } = this.inputRef;
     if (src === placeholder) {
@@ -84,7 +84,7 @@ class InputImage extends React.Component {
             preview={isSrcLoaded}
             src={src}
             width={200}
-            onClick={this.handleUploadClick}
+            onClick={this.handleClick}
           />
           {isSrcLoaded && (
             <div className={styles.overlay}>

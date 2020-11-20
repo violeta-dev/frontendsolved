@@ -1,41 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'prop-types';
 import { Button, Modal } from 'antd';
 
-class ConfirmationButton extends React.Component {
-  state = {
-    visible: false,
+function ConfirmationButton({ confirmationProps, onConfirm, ...buttonProps }) {
+  const [visible, setVisible] = useState(false);
+
+  const handleClick = () => setVisible(true);
+  const handleCancel = () => setVisible(false);
+
+  const handleOk = () => {
+    setVisible(false);
+    onConfirm();
   };
 
-  handleClick = () => this.setState({ visible: true });
-
-  handleCancel = () => this.setState({ visible: false });
-
-  handleOk = () => {
-    const { onConfirm } = this.props;
-    this.setState({ visible: false }, onConfirm);
-  };
-
-  render() {
-    const { confirmationProps, onConfirm, ...buttonProps } = this.props;
-    const { visible } = this.state;
-
-    const { content } = confirmationProps;
-
-    return (
-      <React.Fragment>
-        <Button onClick={this.handleClick} {...buttonProps} />
-        <Modal
-          visible={visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          {...confirmationProps}
-        >
-          {content}
-        </Modal>
-      </React.Fragment>
-    );
-  }
+  const { content } = confirmationProps;
+  return (
+    <React.Fragment>
+      <Button onClick={handleClick} {...buttonProps} />
+      <Modal
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        {...confirmationProps}
+      >
+        {content}
+      </Modal>
+    </React.Fragment>
+  );
 }
 
 ConfirmationButton.propTypes = {
@@ -43,6 +34,10 @@ ConfirmationButton.propTypes = {
     content: T.node,
   }).isRequired,
   onConfirm: T.func,
+};
+
+ConfirmationButton.defaultProps = {
+  onConfirm: () => {},
 };
 
 export default ConfirmationButton;

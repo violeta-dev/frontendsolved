@@ -1,9 +1,10 @@
-import T from 'prop-types';
+import React, { useContext } from 'react';
 import { Route, Redirect, useLocation } from 'react-router-dom';
 
-import { AuthContextConsumer } from '../../contexts/auth';
+import AuthContext from '../../contexts/auth';
 
-const PrivateRoute = ({ isLogged, ...props }) => {
+const PrivateRoute = props => {
+  const { isLogged } = useContext(AuthContext);
   const location = useLocation();
   return isLogged ? (
     <Route {...props} />
@@ -11,14 +12,5 @@ const PrivateRoute = ({ isLogged, ...props }) => {
     <Redirect to={{ pathname: '/login', state: { from: location } }} />
   );
 };
-PrivateRoute.propTypes = {
-  isLogged: T.bool.isRequired,
-};
 
-const ConnectedToAuthPrivateRoute = props => (
-  <AuthContextConsumer>
-    {({ isLogged }) => <PrivateRoute isLogged={isLogged} {...props} />}
-  </AuthContextConsumer>
-);
-
-export default ConnectedToAuthPrivateRoute;
+export default PrivateRoute;
