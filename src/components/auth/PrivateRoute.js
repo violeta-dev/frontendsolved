@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Route, Redirect, useLocation } from 'react-router-dom';
 
-import AuthContext from '../../contexts/auth';
+import { useAuthContext } from '../../contexts/auth';
 
 const PrivateRoute = props => {
-  const { isLogged } = useContext(AuthContext);
+  const { isLogged } = useAuthContext();
   const location = useLocation();
   return isLogged ? (
     <Route {...props} />
