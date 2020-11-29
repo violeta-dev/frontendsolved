@@ -16,23 +16,31 @@ class AdvertsPage extends React.Component {
     filters: storage.get('filters') || defaultFilters,
   };
 
-  formatFiltersString = () => {
+  formatFilters = () => {
     const {
       filters: { name, sale, price, tags },
     } = this.state;
-    return [
-      name ? `name=${name}` : '',
-      sale === 'sell' ? 'sale=true' : sale === 'buy' ? 'sale=false' : '',
-      price.length ? `price=${price.join('-')}` : '',
-      tags.length ? `tags=${tags.join(',')}` : '',
-    ]
-      .filter(filter => filter)
-      .join('&');
+
+    const filters = {};
+    if (name) {
+      filters.name = name;
+    }
+    if (['sell', 'buy'].includes(sale)) {
+      filters.sale = sale === 'sell';
+    }
+    if (price.length) {
+      filters.price = price.join('-');
+    }
+    if (tags.length) {
+      filters.tags = tags.join(',');
+    }
+
+    return filters;
   };
 
   getAdverts = () => {
     this.setState({ loading: true, error: null });
-    getAdverts(this.formatFiltersString())
+    getAdverts(this.formatFilters())
       .then(({ result }) =>
         this.setState({ loading: false, adverts: result.rows }),
       )
