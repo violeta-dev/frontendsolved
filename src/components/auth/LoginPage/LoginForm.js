@@ -10,7 +10,7 @@ function LoginForm({ onSubmit }) {
   const [form, handleChange] = useForm({
     email: '',
     password: '',
-    remember: { value: false, valuePropName: 'checked' },
+    remember: false,
   });
   const { email, password, remember } = form;
 
