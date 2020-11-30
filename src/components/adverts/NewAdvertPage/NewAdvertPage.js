@@ -13,10 +13,13 @@ class NewAdvertPage extends React.Component {
 
   handleSubmit = advert => {
     const { history } = this.props;
-    createAdvert(advert).then(({ result: advert }) =>
-      history.push(`/adverts/${advert._id}`),
-    );
+    this.resetError();
+    createAdvert(advert)
+      .then(({ result: advert }) => history.push(`/adverts/${advert._id}`))
+      .catch(error => this.setState({ error }));
   };
+
+  resetError = () => this.setState({ error: null });
 
   render() {
     const { error } = this.state;
