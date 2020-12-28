@@ -28,12 +28,12 @@ class AdvertPage extends React.Component {
 
   getAdvert = async () => {
     try {
-      const { result } = await getAdvert(this.getAdvertId());
-      if (!result) {
+      const advert = await getAdvert(this.getAdvertId());
+      if (!advert) {
         const error = { message: 'Not found' };
         throw error;
       }
-      this.setState({ advert: result });
+      this.setState({ advert });
     } catch (error) {
       this.setState({ error });
     }

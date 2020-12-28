@@ -11,7 +11,7 @@ class TagsSelect extends React.Component {
   };
 
   componentDidMount() {
-    getTags().then(({ result: tags }) => this.setState({ tags }));
+    getTags().then(tags => this.setState({ tags }));
   }
 
   render() {

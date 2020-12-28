@@ -15,7 +15,7 @@ class NewAdvertPage extends React.Component {
     const { history } = this.props;
     this.resetError();
     createAdvert(advert)
-      .then(({ result: advert }) => history.push(`/adverts/${advert._id}`))
+      .then(createdAdvert => history.push(`/adverts/${createdAdvert._id}`))
       .catch(error => this.setState({ error }));
   };
 

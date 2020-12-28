@@ -41,9 +41,7 @@ class AdvertsPage extends React.Component {
   getAdverts = () => {
     this.setState({ loading: true, error: null });
     getAdverts(this.formatFilters())
-      .then(({ result }) =>
-        this.setState({ loading: false, adverts: result.rows }),
-      )
+      .then(adverts => this.setState({ loading: false, adverts }))
       .catch(error => this.setState({ loading: false, error }));
   };
 
