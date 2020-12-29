@@ -1,12 +1,14 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { deleteAdvert, loadAdvert } from '../../../store/actions';
+import { Redirect } from 'react-router-dom';
 
-import { getAdvert, getUi } from '../../../store/selectors';
+import { deleteAdvert, loadAdvert } from '../../../store/actions';
+import { getAdvert } from '../../../store/selectors';
+import withDataLoad from '../../../hocs/withDataLoad';
 
 import AdvertPage from './AdvertPage';
 
 const mapStateToProps = (state, ownProps) => ({
-  ...getUi(state),
   advert: getAdvert(ownProps.match.params.id)(state),
 });
 
@@ -18,4 +20,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdvertPage);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withDataLoad({
+    noRender: ({ advert }) => !advert,
+    renderError: () => <Redirect to="/404" />,
+  }),
+)(AdvertPage);

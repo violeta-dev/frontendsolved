@@ -10,6 +10,10 @@ export const getAdverts = filters => {
 
 export const getAdvert = id =>
   client.get(`/adverts/${id}`).then(advert => {
+    if (!advert) {
+      const error = 'Not found';
+      throw error;
+    }
     advert.photoUrl = `${host}${advert.photo}`;
     advert.id = id;
     return advert;

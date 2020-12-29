@@ -1,6 +1,5 @@
 import React from 'react';
 import T from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import { Divider, Image, Typography, Statistic, Row, Col } from 'antd';
 
 import Layout from '../../layout';
@@ -9,25 +8,16 @@ import { DeleteOutlined } from '@ant-design/icons';
 import placeholder from '../../../assets/photo-placeholder.png';
 import Tags from '../Tags';
 import { formatter } from '../../../utils/numbers';
-import { advert, ui } from '../../../propTypes';
+import { advert } from '../../../propTypes';
 
 const { Title } = Typography;
 
-class AdvertPage extends React.Component {
-  renderAdvert = () => {
-    const { advert, error, onDelete } = this.props;
+const AdvertPage = ({ advert, onDelete }) => {
+  const { name, price, tags, sale, photoUrl } = advert;
 
-    if (error) {
-      return <Redirect to="/404" />;
-    }
-
-    if (!advert) {
-      return null;
-    }
-
-    const { name, price, tags, sale, photoUrl } = advert;
-
-    return (
+  return (
+    <Layout title="Advert detail">
+      <Divider>Detail of your advert</Divider>
       <Row>
         <Col span={24}>
           <Title level={2}>
@@ -69,33 +59,13 @@ class AdvertPage extends React.Component {
           Delete
         </ConfirmationButton>
       </Row>
-    );
-  };
-
-  componentDidMount() {
-    this.props.onLoad();
-  }
-
-  render() {
-    return (
-      <Layout title="Advert detail">
-        <Divider>Detail of your advert</Divider>
-        {this.renderAdvert()}
-      </Layout>
-    );
-  }
-}
-
-AdvertPage.propTypes = {
-  ...ui,
-  advert: T.shape(advert),
-  onLoad: T.func.isRequired,
-  onDelete: T.func,
+    </Layout>
+  );
 };
 
-AdvertPage.defaultProps = {
-  advert: null,
-  onDelete: () => {},
+AdvertPage.propTypes = {
+  advert: T.shape(advert).isRequired,
+  onDelete: T.func.isRequired,
 };
 
 export default AdvertPage;
