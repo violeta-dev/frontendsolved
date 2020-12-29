@@ -4,7 +4,7 @@ const defaultState = {
   auth: false,
   adverts: null,
   tags: [],
-  advert: null,
+  advert: {},
   ui: {
     loading: false,
     error: null,
@@ -36,7 +36,12 @@ export function tags(state = defaultState.tags, action) {
 }
 
 export function advert(state = defaultState.advert, action) {
-  return state;
+  switch (action.type) {
+    case types.ADVERT_LOAD_SUCCESS:
+      return { ...state, [action.payload.id]: action.payload };
+    default:
+      return state;
+  }
 }
 
 export function ui(state = defaultState.ui, action) {

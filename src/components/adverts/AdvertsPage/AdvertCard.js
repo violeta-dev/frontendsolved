@@ -1,7 +1,7 @@
-import T from 'prop-types';
 import { Card, Statistic, Row, Col, Divider, Typography } from 'antd';
 
 import { formatter } from '../../../utils/numbers';
+import { advert } from '../../../propTypes';
 import Tags from '../Tags';
 
 const getHeadStyle = sale =>
@@ -29,11 +29,7 @@ const AdvertCard = ({ name, price, sale, tags }) => (
     <Tags tags={tags}></Tags>
   </Card>
 );
-AdvertCard.propTypes = {
-  name: T.string.isRequired,
-  price: T.number.isRequired,
-  sale: T.bool.isRequired,
-  tags: T.arrayOf(T.string.isRequired).isRequired,
-};
+
+AdvertCard.propTypes = advert;
 
 export default AdvertCard;

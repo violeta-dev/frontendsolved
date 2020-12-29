@@ -6,9 +6,12 @@ import {
   TAGS_LOAD_REQUEST,
   TAGS_LOAD_SUCCESS,
   TAGS_LOAD_FAILURE,
+  ADVERT_LOAD_REQUEST,
+  ADVERT_LOAD_SUCCESS,
+  ADVERT_LOAD_FAILURE,
   UI_RESET_ERROR,
 } from './types';
-import { getTags } from './selectors';
+import { getTags, getAdvert } from './selectors';
 
 const authLoginRequest = () => ({
   type: AUTH_LOGIN_REQUEST,
@@ -78,6 +81,36 @@ export const loadTags = () => async (dispatch, getState, { api }) => {
     dispatch(tagsLoadSuccess(tags));
   } catch (error) {
     dispatch(tagsLoadFailure(error));
+  }
+};
+
+const advertLoadRequest = () => ({
+  type: ADVERT_LOAD_REQUEST,
+});
+
+const advertLoadSuccess = advert => ({
+  type: ADVERT_LOAD_SUCCESS,
+  payload: advert,
+});
+
+const advertLoadFailure = error => ({
+  type: ADVERT_LOAD_FAILURE,
+  error: true,
+  payload: error,
+});
+
+export const loadAdvert = id => async (dispatch, getState, { api }) => {
+  // Avoid re-fetch advert
+  const advert = getAdvert(id)(getState());
+  if (advert) {
+    return;
+  }
+  dispatch(advertLoadRequest());
+  try {
+    const advert = await api.adverts.getAdvert(id);
+    dispatch(advertLoadSuccess(advert));
+  } catch (error) {
+    dispatch(advertLoadFailure(error));
   }
 };
 

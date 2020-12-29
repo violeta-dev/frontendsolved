@@ -11,6 +11,7 @@ export const getAdverts = filters => {
 export const getAdvert = id =>
   client.get(`/adverts/${id}`).then(advert => {
     advert.photoUrl = `${host}${advert.photo}`;
+    advert.id = id;
     return advert;
   });
 

@@ -15,9 +15,21 @@ export const location = T.shape({
   state: T.shape({ from: T.shape({ pathname: T.string }) }),
 });
 
+export const match = T.shape({
+  params: T.shape({ id: T.string.isRequired }).isRequired,
+});
+
 export const ui = {
   loading: T.bool,
   error: T.string,
 };
 
 export const tags = T.arrayOf(T.string.isRequired);
+
+export const advert = {
+  name: T.string.isRequired,
+  price: T.number.isRequired,
+  tags: tags.isRequired,
+  sale: T.bool.isRequired,
+  photoUrl: T.string,
+};

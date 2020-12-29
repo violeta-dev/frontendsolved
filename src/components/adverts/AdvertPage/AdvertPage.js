@@ -3,44 +3,19 @@ import T from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { Divider, Image, Typography, Statistic, Row, Col } from 'antd';
 
-import { getAdvert, deleteAdvert } from '../../../api/adverts';
 import Layout from '../../layout';
 import { ConfirmationButton } from '../../shared';
 import { DeleteOutlined } from '@ant-design/icons';
 import placeholder from '../../../assets/photo-placeholder.png';
 import Tags from '../Tags';
 import { formatter } from '../../../utils/numbers';
+import { advert, ui } from '../../../propTypes';
 
 const { Title } = Typography;
 
 class AdvertPage extends React.Component {
-  state = {
-    advert: null,
-    error: null,
-  };
-
-  getAdvertId = () => this.props.match.params.id;
-
-  handleDeleteClick = () => {
-    const { history } = this.props;
-    deleteAdvert(this.getAdvertId()).then(() => history.push('/'));
-  };
-
-  getAdvert = async () => {
-    try {
-      const advert = await getAdvert(this.getAdvertId());
-      if (!advert) {
-        const error = { message: 'Not found' };
-        throw error;
-      }
-      this.setState({ advert });
-    } catch (error) {
-      this.setState({ error });
-    }
-  };
-
   renderAdvert = () => {
-    const { advert, error } = this.state;
+    const { advert, error, onDelete } = this.props;
 
     if (error) {
       return <Redirect to="/404" />;
@@ -87,7 +62,7 @@ class AdvertPage extends React.Component {
               danger: true,
             },
           }}
-          onConfirm={this.handleDeleteClick}
+          onConfirm={onDelete}
           style={{ marginTop: 20 }}
           block
         >
@@ -98,7 +73,7 @@ class AdvertPage extends React.Component {
   };
 
   componentDidMount() {
-    this.getAdvert();
+    this.props.onLoad();
   }
 
   render() {
@@ -112,8 +87,15 @@ class AdvertPage extends React.Component {
 }
 
 AdvertPage.propTypes = {
-  match: T.shape({ params: T.shape({ id: T.string.isRequired }).isRequired })
-    .isRequired,
+  ...ui,
+  advert: T.shape(advert),
+  onLoad: T.func.isRequired,
+  onDelete: T.func,
+};
+
+AdvertPage.defaultProps = {
+  advert: null,
+  onDelete: () => {},
 };
 
 export default AdvertPage;
