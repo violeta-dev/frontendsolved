@@ -23,3 +23,5 @@ export const TAGS_LOAD_FAILURE = 'tags/LOAD_FAILURE';
 export const ADVERT_LOAD_REQUEST = 'advert/LOAD_REQUEST';
 export const ADVERT_LOAD_SUCCESS = 'advert/LOAD_SUCCESS';
 export const ADVERT_LOAD_FAILURE = 'advert/LOAD_FAILURE';
+
+export const UI_RESET_ERROR = 'ui/RESET_ERROR';

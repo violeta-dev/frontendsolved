@@ -5,6 +5,10 @@ const defaultState = {
   adverts: null,
   tags: null,
   advert: null,
+  ui: {
+    loading: false,
+    error: null,
+  },
 };
 
 export function auth(state = defaultState.auth, action) {
@@ -32,5 +36,22 @@ export function tags(state = defaultState.adverts, action) {
 }
 
 export function advert(state = defaultState.advert, action) {
+  return state;
+}
+
+export function ui(state = defaultState.ui, action) {
+  if (action.type === types.UI_RESET_ERROR) {
+    return { ...state, error: null };
+  }
+  if (/_REQUEST$/.test(action.type)) {
+    return { loading: true, error: null };
+  }
+  if (/_SUCCESS$/.test(action.type)) {
+    return { loading: false, error: null };
+  }
+  if (/_FAILURE$/.test(action.type)) {
+    return { loading: false, error: action.payload };
+  }
+
   return state;
 }
