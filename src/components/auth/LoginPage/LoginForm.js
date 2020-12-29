@@ -1,60 +1,56 @@
 import React from 'react';
 import T from 'prop-types';
-import { Button, Checkbox, Input } from 'antd';
+import { Button, Checkbox, Input as DesignInput } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
-import useForm from '../../../hooks/useForm';
+import { Form, Input } from '../../shared/Form';
 import styles from './LoginForm.module.css';
 
-function LoginForm({ onSubmit }) {
-  const [form, handleChange] = useForm({
-    email: '',
-    password: '',
-    remember: false,
-  });
-  const { email, password, remember } = form;
-
-  const canSubmit = () => {
-    return !!(email && password);
-  };
-
-  const handleSubmit = ev => {
-    ev.preventDefault();
-    onSubmit(form);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        name="email"
-        className={styles.input}
-        prefix={<MailOutlined />}
-        placeholder="Email"
-        onChange={handleChange}
-        value={email}
-      />
-      <Input.Password
-        name="password"
-        className={styles.input}
-        prefix={<LockOutlined />}
-        placeholder="Password"
-        onChange={handleChange}
-        value={password}
-      />
-      <Checkbox
-        name="remember"
-        className={styles.input}
-        onChange={handleChange}
-        checked={remember}
-      >
-        Remember me
-      </Checkbox>
-      <Button type="primary" htmlType="submit" disabled={!canSubmit()} block>
-        Log In
-      </Button>
-    </form>
-  );
-}
+const LoginForm = ({ onSubmit }) => (
+  <Form
+    onSubmit={onSubmit}
+    initialValues={{
+      email: '',
+      password: '',
+      remember: false,
+    }}
+  >
+    {({ values: { email, password } }) => (
+      <React.Fragment>
+        <Input
+          name="email"
+          className={styles.input}
+          prefix={<MailOutlined />}
+          placeholder="Email"
+          component={DesignInput}
+        />
+        <Input
+          name="password"
+          className={styles.input}
+          prefix={<LockOutlined />}
+          placeholder="Password"
+          component={DesignInput.Password}
+        />
+        <Checkbox
+          type="checkbox"
+          name="remember"
+          className={styles.input}
+          component={Checkbox}
+        >
+          Remember me
+        </Checkbox>
+        <Button
+          type="primary"
+          htmlType="submit"
+          disabled={!email || !password}
+          block
+        >
+          Log In
+        </Button>
+      </React.Fragment>
+    )}
+  </Form>
+);
 
 LoginForm.propTypes = {
   onSubmit: T.func.isRequired,

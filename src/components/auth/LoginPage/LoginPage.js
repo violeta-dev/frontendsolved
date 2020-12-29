@@ -3,6 +3,7 @@ import T from 'prop-types';
 import { Alert, Col, Row, Typography } from 'antd';
 
 import LoginForm from './LoginForm';
+import { ui } from '../../../propTypes';
 
 const { Title } = Typography;
 
@@ -26,9 +27,9 @@ const LoginPage = ({ error, onErrorClose, onLogin }) => (
 );
 
 LoginPage.propTypes = {
+  ...ui,
   onLogin: T.func.isRequired,
   onErrorClose: T.func.isRequired,
-  error: T.string,
 };
 
 export default LoginPage;

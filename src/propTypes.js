@@ -14,3 +14,8 @@ export const history = T.shape({
 export const location = T.shape({
   state: T.shape({ from: T.shape({ pathname: T.string }) }),
 });
+
+export const ui = {
+  loading: T.bool,
+  error: T.string,
+};

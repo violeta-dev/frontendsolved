@@ -41,14 +41,17 @@ client.interceptors.response.use(
     if (!ok) {
       return Promise.reject(data.error);
     }
-    if (!data.hasOwnProperty('result')) {
-      return Promise.resolve(data);
+    if (data.hasOwnProperty('result')) {
+      return Promise.resolve(data.result);
     }
-    return Promise.resolve(data.result);
+    return Promise.resolve(data);
   },
   error => {
     if (error.response) {
       return Promise.reject(error.response.data.error);
+    }
+    if (error.message) {
+      return Promise.reject(error.message);
     }
     return Promise.reject(error);
   },
