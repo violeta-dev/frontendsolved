@@ -1,7 +1,7 @@
 import React from 'react';
-import T from 'prop-types';
 
 import { Tag } from 'antd';
+import { tags } from '../../propTypes';
 
 const tagsColors = {
   motor: 'green',
@@ -10,15 +10,16 @@ const tagsColors = {
   work: 'blue',
 };
 
-const Tags = ({ tags }) =>
-  tags.map(tag => (
-    <Tag key={tag} color={tagsColors[tag]}>
-      {tag}
-    </Tag>
-  ));
+const renderTag = tag => (
+  <Tag key={tag} color={tagsColors[tag]}>
+    {tag}
+  </Tag>
+);
+
+const Tags = ({ tags }) => tags.map(renderTag);
 
 Tags.propTypes = {
-  tags: T.arrayOf(T.string.isRequired).isRequired,
+  tags: tags.isRequired,
 };
 
 export default Tags;

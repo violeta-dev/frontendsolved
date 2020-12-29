@@ -31,14 +31,14 @@ const LoginForm = ({ onSubmit }) => (
           placeholder="Password"
           component={DesignInput.Password}
         />
-        <Checkbox
+        <Input
           type="checkbox"
           name="remember"
           className={styles.input}
           component={Checkbox}
         >
           Remember me
-        </Checkbox>
+        </Input>
         <Button
           type="primary"
           htmlType="submit"

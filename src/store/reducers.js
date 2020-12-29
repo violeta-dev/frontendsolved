@@ -3,7 +3,7 @@ import * as types from './types';
 const defaultState = {
   auth: false,
   adverts: null,
-  tags: null,
+  tags: [],
   advert: null,
   ui: {
     loading: false,
@@ -26,7 +26,7 @@ export function adverts(state = defaultState.adverts, action) {
   return state;
 }
 
-export function tags(state = defaultState.adverts, action) {
+export function tags(state = defaultState.tags, action) {
   switch (action.type) {
     case types.TAGS_LOAD_SUCCESS:
       return action.payload;

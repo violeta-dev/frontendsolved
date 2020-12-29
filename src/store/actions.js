@@ -3,8 +3,12 @@ import {
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGIN_FAILURE,
   AUTH_LOGOUT,
+  TAGS_LOAD_REQUEST,
+  TAGS_LOAD_SUCCESS,
+  TAGS_LOAD_FAILURE,
   UI_RESET_ERROR,
 } from './types';
+import { getTags } from './selectors';
 
 const authLoginRequest = () => ({
   type: AUTH_LOGIN_REQUEST,
@@ -45,6 +49,36 @@ export const logout = () => async (dispatch, _getState, { api, history }) => {
   await api.auth.logout();
   dispatch(authLogout());
   history.push('/login');
+};
+
+const tagsLoadRequest = () => ({
+  type: TAGS_LOAD_REQUEST,
+});
+
+const tagsLoadSuccess = tags => ({
+  type: TAGS_LOAD_SUCCESS,
+  payload: tags,
+});
+
+const tagsLoadFailure = error => ({
+  type: TAGS_LOAD_FAILURE,
+  error: true,
+  payload: error,
+});
+
+export const loadTags = () => async (dispatch, getState, { api }) => {
+  // Avoid re-fetch tags
+  const tags = getTags(getState());
+  if (tags.length) {
+    return;
+  }
+  dispatch(tagsLoadRequest());
+  try {
+    const tags = await api.adverts.getTags();
+    dispatch(tagsLoadSuccess(tags));
+  } catch (error) {
+    dispatch(tagsLoadFailure(error));
+  }
 };
 
 export const resetError = () => ({

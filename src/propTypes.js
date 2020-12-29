@@ -19,3 +19,5 @@ export const ui = {
   loading: T.bool,
   error: T.string,
 };
+
+export const tags = T.arrayOf(T.string.isRequired);
