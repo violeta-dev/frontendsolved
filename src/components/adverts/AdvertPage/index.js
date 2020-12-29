@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { loadAdvert } from '../../../store/actions';
+import { deleteAdvert, loadAdvert } from '../../../store/actions';
 
 import { getAdvert, getUi } from '../../../store/selectors';
 
@@ -10,8 +10,12 @@ const mapStateToProps = (state, ownProps) => ({
   advert: getAdvert(ownProps.match.params.id)(state),
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onLoad: () => dispatch(loadAdvert(ownProps.match.params.id)),
-});
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const { id } = ownProps.match.params;
+  return {
+    onLoad: () => dispatch(loadAdvert(id)),
+    onDelete: () => dispatch(deleteAdvert(id)),
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdvertPage);

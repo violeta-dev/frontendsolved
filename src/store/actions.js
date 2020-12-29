@@ -6,6 +6,9 @@ import {
   TAGS_LOAD_REQUEST,
   TAGS_LOAD_SUCCESS,
   TAGS_LOAD_FAILURE,
+  ADVERTS_DELETE_REQUEST,
+  ADVERTS_DELETE_SUCCESS,
+  ADVERTS_DELETE_FAILURE,
   ADVERT_LOAD_REQUEST,
   ADVERT_LOAD_SUCCESS,
   ADVERT_LOAD_FAILURE,
@@ -111,6 +114,36 @@ export const loadAdvert = id => async (dispatch, getState, { api }) => {
     dispatch(advertLoadSuccess(advert));
   } catch (error) {
     dispatch(advertLoadFailure(error));
+  }
+};
+
+const advertsDeleteRequest = () => ({
+  type: ADVERTS_DELETE_REQUEST,
+});
+
+const advertsDeleteSuccess = id => ({
+  type: ADVERTS_DELETE_SUCCESS,
+  payload: id,
+});
+
+const advertsDeleteFailure = error => ({
+  type: ADVERTS_DELETE_FAILURE,
+  error: true,
+  payload: error,
+});
+
+export const deleteAdvert = id => async (
+  dispatch,
+  _getState,
+  { api, history },
+) => {
+  dispatch(advertsDeleteRequest());
+  try {
+    await api.adverts.deleteAdvert(id);
+    dispatch(advertsDeleteSuccess(id));
+    history.push('/');
+  } catch (error) {
+    dispatch(advertsDeleteFailure(error));
   }
 };
 
