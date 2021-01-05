@@ -27,6 +27,7 @@ export const ui = {
 export const tags = T.arrayOf(T.string.isRequired);
 
 export const advert = {
+  id: T.string.isRequired,
   name: T.string.isRequired,
   price: T.number.isRequired,
   tags: tags.isRequired,

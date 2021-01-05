@@ -5,7 +5,9 @@ const { REACT_APP_API_HOST: host } = process.env;
 export const getAdverts = filters => {
   return client
     .get(`/adverts`, { params: filters })
-    .then(({ rows: adverts }) => adverts);
+    .then(({ rows: adverts }) =>
+      adverts.map(advert => ({ ...advert, id: advert._id })),
+    );
 };
 
 export const getAdvert = id =>

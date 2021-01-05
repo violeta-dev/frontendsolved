@@ -23,7 +23,12 @@ export function auth(state = defaultState.auth, action) {
 }
 
 export function adverts(state = defaultState.adverts, action) {
-  return state;
+  switch (action.type) {
+    case types.ADVERTS_LOAD_SUCCESS:
+      return [...action.payload];
+    default:
+      return state;
+  }
 }
 
 export function tags(state = defaultState.tags, action) {

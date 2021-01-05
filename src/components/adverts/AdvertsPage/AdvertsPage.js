@@ -1,18 +1,16 @@
 import React from 'react';
+import T from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Empty, Button, Spin, List, Divider } from 'antd';
 
 import storage from '../../../utils/storage';
-import { getAdverts } from '../../../api/adverts';
 import Layout from '../../layout';
 import FiltersForm, { defaultFilters } from './FiltersForm';
 import AdvertCard from './AdvertCard';
+import { advert, ui } from '../../../propTypes';
 
 class AdvertsPage extends React.Component {
   state = {
-    adverts: null,
-    loading: false,
-    error: null,
     filters: storage.get('filters') || defaultFilters,
   };
 
@@ -39,15 +37,12 @@ class AdvertsPage extends React.Component {
   };
 
   getAdverts = () => {
-    this.setState({ loading: true, error: null });
-    getAdverts(this.formatFilters())
-      .then(adverts => this.setState({ loading: false, adverts }))
-      .catch(error => this.setState({ loading: false, error }));
+    const { onFetchAdverts } = this.props;
+    onFetchAdverts(this.formatFilters());
   };
-
   handleSubmit = filters => {
     storage.set('filters', filters);
-    this.setState({ filters });
+    this.setState({ filters }, this.getAdverts);
   };
 
   renderLoading = () => (
@@ -57,7 +52,7 @@ class AdvertsPage extends React.Component {
   );
 
   renderError = () => {
-    const { error } = this.state;
+    const { error } = this.props;
     return (
       <Empty
         description={<span style={{ color: '#ff4d4f' }}>{`${error}`}</span>}
@@ -89,7 +84,7 @@ class AdvertsPage extends React.Component {
   renderAdvert = advert => {
     return (
       <List.Item>
-        <Link to={`/adverts/${advert._id}`}>
+        <Link to={`/adverts/${advert.id}`}>
           <AdvertCard {...advert} />
         </Link>
       </List.Item>
@@ -97,8 +92,7 @@ class AdvertsPage extends React.Component {
   };
 
   renderAdverts = () => {
-    const { adverts, loading, error } = this.state;
-
+    const { adverts, loading, error } = this.props;
     if (loading) {
       return this.renderLoading();
     }
@@ -128,13 +122,6 @@ class AdvertsPage extends React.Component {
     this.getAdverts();
   }
 
-  componentDidUpdate(prevProps, { filters: prevFilters }) {
-    const { filters } = this.state;
-    if (JSON.stringify(filters) !== JSON.stringify(prevFilters)) {
-      this.getAdverts();
-    }
-  }
-
   render() {
     const { filters } = this.state;
     return (
@@ -147,5 +134,11 @@ class AdvertsPage extends React.Component {
     );
   }
 }
+
+AdvertsPage.propTypes = {
+  ...ui,
+  adverts: T.arrayOf(T.shape(advert).isRequired),
+  onFetchAdverts: T.func.isRequired,
+};
 
 export default AdvertsPage;
