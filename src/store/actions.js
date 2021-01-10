@@ -9,6 +9,7 @@ import {
   ADVERTS_LOAD_REQUEST,
   ADVERTS_LOAD_SUCCESS,
   ADVERTS_LOAD_FAILURE,
+  FILTERS_SAVE,
   ADVERTS_DELETE_REQUEST,
   ADVERTS_DELETE_SUCCESS,
   ADVERTS_DELETE_FAILURE,
@@ -17,7 +18,8 @@ import {
   ADVERT_LOAD_FAILURE,
   UI_RESET_ERROR,
 } from './types';
-import { getTags, getAdvert } from './selectors';
+import { getTags, getAdvert, getFilters } from './selectors';
+import { defaultState } from './reducers';
 
 const authLoginRequest = () => ({
   type: AUTH_LOGIN_REQUEST,
@@ -37,14 +39,19 @@ const authLogout = () => ({
   type: AUTH_LOGOUT,
 });
 
-export const login = (credentials, location) => async (
+export const login = ({ remember, ...credentials }, location) => async (
   dispatch,
   _getState,
-  { api, history },
+  { api, history, storage },
 ) => {
   dispatch(authLoginRequest());
   try {
-    await api.auth.login(credentials);
+    const auth = await api.auth.login(credentials);
+    // Store token
+    if (remember) {
+      storage.set('auth', auth);
+    }
+    // Dispatch action
     dispatch(authLoginSuccess());
     // Navigate to previously required route
     const { from } = location.state || { from: { pathname: '/' } };
@@ -54,8 +61,13 @@ export const login = (credentials, location) => async (
   }
 };
 
-export const logout = () => async (dispatch, _getState, { api, history }) => {
+export const logout = () => async (
+  dispatch,
+  _getState,
+  { api, history, storage },
+) => {
   await api.auth.logout();
+  storage.remove('auth');
   dispatch(authLogout());
   history.push('/login');
 };
@@ -94,9 +106,9 @@ const advertsLoadRequest = () => ({
   type: ADVERTS_LOAD_REQUEST,
 });
 
-const advertsLoadSuccess = adverts => ({
+const advertsLoadSuccess = payload => ({
   type: ADVERTS_LOAD_SUCCESS,
-  payload: adverts,
+  payload,
 });
 
 const advertsLoadFailure = error => ({
@@ -105,14 +117,34 @@ const advertsLoadFailure = error => ({
   payload: error,
 });
 
-export const loadAdverts = filters => async (dispatch, _getState, { api }) => {
+const filtersSave = filters => ({
+  type: FILTERS_SAVE,
+  payload: filters,
+});
+
+export const loadAdverts = () => async (dispatch, getState, { api }) => {
   dispatch(advertsLoadRequest());
   try {
-    const adverts = await api.adverts.getAdverts(filters);
+    const filters = getFilters(getState());
+    const adverts = await api.adverts.getAdverts(
+      JSON.stringify(filters) !== JSON.stringify(defaultState.filters)
+        ? filters
+        : undefined,
+    );
     dispatch(advertsLoadSuccess(adverts));
   } catch (error) {
     dispatch(advertsLoadFailure(error));
   }
+};
+
+export const loadFilteredAdverts = filters => (
+  dispatch,
+  _getState,
+  { storage },
+) => {
+  dispatch(filtersSave(filters));
+  storage.set('filters', filters);
+  dispatch(loadAdverts());
 };
 
 const advertLoadRequest = () => ({

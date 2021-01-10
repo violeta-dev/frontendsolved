@@ -1,8 +1,17 @@
 import * as types from './types';
+import { saleOptions } from '../definitions';
 
-const defaultState = {
+const defaultFilters = {
+  name: '',
+  sale: saleOptions.all.value,
+  price: [],
+  tags: [],
+};
+
+export const defaultState = {
   auth: false,
   adverts: null,
+  filters: defaultFilters,
   tags: [],
   advert: {},
   ui: {
@@ -26,6 +35,15 @@ export function adverts(state = defaultState.adverts, action) {
   switch (action.type) {
     case types.ADVERTS_LOAD_SUCCESS:
       return [...action.payload];
+    default:
+      return state;
+  }
+}
+
+export function filters(state = defaultState.filters, action) {
+  switch (action.type) {
+    case types.FILTERS_SAVE:
+      return action.payload;
     default:
       return state;
   }

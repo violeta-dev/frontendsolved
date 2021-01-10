@@ -5,9 +5,9 @@ import thunk from 'redux-thunk';
 import * as reducers from './reducers';
 import * as api from '../api';
 
-export function configureStore(preloadedState, { history }) {
+export function configureStore(preloadedState, { history, storage }) {
   const reducer = combineReducers(reducers);
-  const middlewares = [thunk.withExtraArgument({ history, api })];
+  const middlewares = [thunk.withExtraArgument({ history, api, storage })];
   const store = createStore(
     reducer,
     preloadedState,

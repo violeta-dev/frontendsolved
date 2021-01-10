@@ -1,18 +1,14 @@
 import React from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
 import { Button, Input, Slider, Radio, Row, Col } from 'antd';
 
 import TagsSelect from '../TagsSelect';
 import FormField from '../../shared/FormField';
-import { saleOptions, MIN_PRICE, MAX_PRICE } from '../definitions';
+import { saleOptions, MIN_PRICE, MAX_PRICE } from '../../../definitions';
 import styles from './FiltersForm.module.css';
-
-export const defaultFilters = {
-  name: '',
-  sale: saleOptions.all.value,
-  price: [],
-  tags: [],
-};
+import { loadFilteredAdverts } from '../../../store/actions';
+import { getFilters } from '../../../store/selectors';
 
 class FiltersForm extends React.Component {
   state = {
@@ -100,16 +96,18 @@ class FiltersForm extends React.Component {
 
 FiltersForm.propTypes = {
   initialFilters: T.shape({
-    name: T.string,
-    sale: T.oneOf(Object.keys(saleOptions)),
-    price: T.arrayOf(T.number),
-    tags: T.arrayOf(T.string),
-  }),
+    name: T.string.isRequired,
+    sale: T.oneOf(Object.keys(saleOptions)).isRequired,
+    price: T.arrayOf(T.number).isRequired,
+    tags: T.arrayOf(T.string).isRequired,
+  }).isRequired,
   onSubmit: T.func.isRequired,
 };
 
-FiltersForm.defaultProps = {
-  initialFilters: defaultFilters,
-};
+const mapStateToProps = state => ({ initialFilters: getFilters(state) });
 
-export default FiltersForm;
+const mapDispatchToProps = dispatch => ({
+  onSubmit: filters => dispatch(loadFilteredAdverts(filters)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FiltersForm);

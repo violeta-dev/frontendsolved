@@ -16,6 +16,8 @@ export const ADVERTS_DELETE_REQUEST = 'adverts/DELETE_REQUEST';
 export const ADVERTS_DELETE_SUCCESS = 'adverts/DELETE_SUCCESS';
 export const ADVERTS_DELETE_FAILURE = 'adverts/DELETE_FAILURE';
 
+export const FILTERS_SAVE = 'filters/SAVE';
+
 export const TAGS_LOAD_REQUEST = 'tags/LOAD_REQUEST';
 export const TAGS_LOAD_SUCCESS = 'tags/LOAD_SUCCESS';
 export const TAGS_LOAD_FAILURE = 'tags/LOAD_FAILURE';

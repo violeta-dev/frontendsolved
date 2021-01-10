@@ -6,7 +6,7 @@ import TagsSelect from '../TagsSelect';
 import { FormField, InputImage } from '../../shared';
 import * as numbers from '../../../utils/numbers';
 
-import { saleOptions, MIN_PRICE, MAX_PRICE } from '../definitions';
+import { saleOptions, MIN_PRICE, MAX_PRICE } from '../../../definitions';
 
 import styles from './NewAdvertForm.module.css';
 
