@@ -2,47 +2,30 @@ import React from 'react';
 import T from 'prop-types';
 import { Alert, Divider } from 'antd';
 
-import { createAdvert } from '../../../api/adverts';
 import Layout from '../../layout';
 import NewAdvertForm from './NewAdvertForm';
+import { ui } from '../../../propTypes';
 
-class NewAdvertPage extends React.Component {
-  state = {
-    error: null,
-  };
-
-  handleSubmit = advert => {
-    const { history } = this.props;
-    this.resetError();
-    createAdvert(advert)
-      .then(createdAdvert => history.push(`/adverts/${createdAdvert._id}`))
-      .catch(error => this.setState({ error }));
-  };
-
-  resetError = () => this.setState({ error: null });
-
-  render() {
-    const { error } = this.state;
-    return (
-      <Layout title="New advert">
-        <Divider>Create an advert</Divider>
-        <NewAdvertForm onSubmit={this.handleSubmit} />
-        {error && (
-          <Alert
-            afterClose={this.resetError}
-            closable
-            message={error}
-            showIcon
-            type="error"
-          />
-        )}
-      </Layout>
-    );
-  }
-}
+const NewAdvertPage = ({ error, onErrorClose, onCreate }) => (
+  <Layout title="New advert">
+    <Divider>Create an advert</Divider>
+    <NewAdvertForm onSubmit={onCreate} />
+    {error && (
+      <Alert
+        afterClose={onErrorClose}
+        closable
+        message={error}
+        showIcon
+        type="error"
+      />
+    )}
+  </Layout>
+);
 
 NewAdvertPage.propTypes = {
-  history: T.shape({ push: T.func.isRequired }).isRequired,
+  ...ui,
+  onCreate: T.func.isRequired,
+  onErrorClose: T.func.isRequired,
 };
 
 export default NewAdvertPage;

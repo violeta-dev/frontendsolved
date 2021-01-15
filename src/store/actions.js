@@ -9,10 +9,13 @@ import {
   ADVERTS_LOAD_REQUEST,
   ADVERTS_LOAD_SUCCESS,
   ADVERTS_LOAD_FAILURE,
-  FILTERS_SAVE,
+  ADVERTS_CREATE_REQUEST,
+  ADVERTS_CREATE_SUCCESS,
+  ADVERTS_CREATE_FAILURE,
   ADVERTS_DELETE_REQUEST,
   ADVERTS_DELETE_SUCCESS,
   ADVERTS_DELETE_FAILURE,
+  FILTERS_SAVE,
   ADVERT_LOAD_REQUEST,
   ADVERT_LOAD_SUCCESS,
   ADVERT_LOAD_FAILURE,
@@ -117,11 +120,6 @@ const advertsLoadFailure = error => ({
   payload: error,
 });
 
-const filtersSave = filters => ({
-  type: FILTERS_SAVE,
-  payload: filters,
-});
-
 export const loadAdverts = () => async (dispatch, getState, { api }) => {
   dispatch(advertsLoadRequest());
   try {
@@ -137,6 +135,40 @@ export const loadAdverts = () => async (dispatch, getState, { api }) => {
   }
 };
 
+const advertsCreateRequest = () => ({
+  type: ADVERTS_CREATE_REQUEST,
+});
+
+const advertsCreateSuccess = () => ({
+  type: ADVERTS_CREATE_SUCCESS,
+});
+
+const advertsCreateFailure = error => ({
+  type: ADVERTS_CREATE_FAILURE,
+  error: true,
+  payload: error,
+});
+
+export const createAdvert = advert => async (
+  dispatch,
+  _getState,
+  { api, history },
+) => {
+  dispatch(advertsCreateRequest());
+  try {
+    const createdAdvertId = await api.adverts.createAdvert(advert);
+    dispatch(advertsCreateSuccess());
+    history.push(`/adverts/${createdAdvertId}`);
+  } catch (error) {
+    dispatch(advertsCreateFailure(error));
+  }
+};
+
+const filtersSave = filters => ({
+  type: FILTERS_SAVE,
+  payload: filters,
+});
+
 export const loadFilteredAdverts = filters => (
   dispatch,
   _getState,
@@ -145,36 +177,6 @@ export const loadFilteredAdverts = filters => (
   dispatch(filtersSave(filters));
   storage.set('filters', filters);
   dispatch(loadAdverts());
-};
-
-const advertLoadRequest = () => ({
-  type: ADVERT_LOAD_REQUEST,
-});
-
-const advertLoadSuccess = advert => ({
-  type: ADVERT_LOAD_SUCCESS,
-  payload: advert,
-});
-
-const advertLoadFailure = error => ({
-  type: ADVERT_LOAD_FAILURE,
-  error: true,
-  payload: error,
-});
-
-export const loadAdvert = id => async (dispatch, getState, { api }) => {
-  // Avoid re-fetch advert
-  const advert = getAdvert(id)(getState());
-  if (advert) {
-    return;
-  }
-  dispatch(advertLoadRequest());
-  try {
-    const advert = await api.adverts.getAdvert(id);
-    dispatch(advertLoadSuccess(advert));
-  } catch (error) {
-    dispatch(advertLoadFailure(error));
-  }
 };
 
 const advertsDeleteRequest = () => ({
@@ -204,6 +206,36 @@ export const deleteAdvert = id => async (
     history.push('/');
   } catch (error) {
     dispatch(advertsDeleteFailure(error));
+  }
+};
+
+const advertLoadRequest = () => ({
+  type: ADVERT_LOAD_REQUEST,
+});
+
+const advertLoadSuccess = advert => ({
+  type: ADVERT_LOAD_SUCCESS,
+  payload: advert,
+});
+
+const advertLoadFailure = error => ({
+  type: ADVERT_LOAD_FAILURE,
+  error: true,
+  payload: error,
+});
+
+export const loadAdvert = id => async (dispatch, getState, { api }) => {
+  // Avoid re-fetch advert
+  const advert = getAdvert(id)(getState());
+  if (advert) {
+    return;
+  }
+  dispatch(advertLoadRequest());
+  try {
+    const advert = await api.adverts.getAdvert(id);
+    dispatch(advertLoadSuccess(advert));
+  } catch (error) {
+    dispatch(advertLoadFailure(error));
   }
 };
 
