@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogoutButton snapshot 1`] = `
+<ConfirmationButton
+  confirmationProps={
+    Object {
+      "cancelText": "No",
+      "content": "Are you sure you want to disconnect?",
+      "okButtonProps": Object {
+        "danger": true,
+      },
+      "okText": "Yes",
+      "title": "Close session?",
+    }
+  }
+  danger={true}
+  icon={<ForwardRef(LogoutOutlined) />}
+  onConfirm={[MockFunction]}
+  shape="round"
+  type="dashed"
+/>
+`;

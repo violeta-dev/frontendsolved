@@ -10,7 +10,7 @@ import styles from './FiltersForm.module.css';
 import { loadFilteredAdverts } from '../../../store/actions';
 import { getFilters } from '../../../store/selectors';
 
-class FiltersForm extends React.Component {
+export class FiltersForm extends React.Component {
   state = {
     ...this.props.initialFilters,
   };

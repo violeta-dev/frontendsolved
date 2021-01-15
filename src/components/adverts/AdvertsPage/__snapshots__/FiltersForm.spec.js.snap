@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FiltersForm snapshot 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <Row
+    className="form"
+  >
+    <Col
+      span={11}
+    >
+      <FormField
+        label="By name"
+      >
+        <Input
+          onChange={[Function]}
+          placeholder="Name"
+          type="text"
+          value="Car"
+        />
+      </FormField>
+      <FormField
+        label={
+          <React.Fragment>
+            By price
+            <strong
+              style={
+                Object {
+                  "margin": "0 5px",
+                }
+              }
+            >
+              0 - 1000
+            </strong>
+          </React.Fragment>
+        }
+      >
+        <Slider
+          defaultValue={
+            Array [
+              0,
+              1000,
+            ]
+          }
+          max={10000}
+          min={0}
+          onChange={[Function]}
+          range={true}
+          tipFormatter={[Function]}
+        />
+      </FormField>
+    </Col>
+    <Col
+      offset={2}
+      span={11}
+    >
+      <FormField
+        label="By tags"
+      >
+        <Connect(TagsSelect)
+          onChange={[Function]}
+          value={Array []}
+        />
+      </FormField>
+      <FormField
+        label="By type"
+      >
+        <Memo([object Object])
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Sell",
+                "value": "sell",
+              },
+              Object {
+                "label": "Buy",
+                "value": "buy",
+              },
+              Object {
+                "label": "All",
+                "value": "all",
+              },
+            ]
+          }
+          value="all"
+        />
+      </FormField>
+    </Col>
+    <Col
+      span={24}
+    >
+      <Button
+        block={true}
+        className="button"
+        ghost={false}
+        htmlType="submit"
+        loading={false}
+        type="primary"
+      >
+        Search
+      </Button>
+    </Col>
+  </Row>
+</form>
+`;
