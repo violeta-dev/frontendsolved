@@ -35,6 +35,13 @@ export function adverts(state = defaultState.adverts, action) {
   switch (action.type) {
     case types.ADVERTS_LOAD_SUCCESS:
       return [...action.payload];
+    case types.ADVERTS_CREATE_SUCCESS:
+      if (!state) {
+        return [action.payload];
+      }
+      return [...state, action.payload];
+    case types.ADVERTS_DELETE_SUCCESS:
+      return state && state.filter(advert => advert.id !== action.payload);
     default:
       return state;
   }

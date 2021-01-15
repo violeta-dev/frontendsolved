@@ -139,8 +139,9 @@ const advertsCreateRequest = () => ({
   type: ADVERTS_CREATE_REQUEST,
 });
 
-const advertsCreateSuccess = () => ({
+const advertsCreateSuccess = createdAdvert => ({
   type: ADVERTS_CREATE_SUCCESS,
+  payload: createdAdvert,
 });
 
 const advertsCreateFailure = error => ({
@@ -156,9 +157,9 @@ export const createAdvert = advert => async (
 ) => {
   dispatch(advertsCreateRequest());
   try {
-    const createdAdvertId = await api.adverts.createAdvert(advert);
-    dispatch(advertsCreateSuccess());
-    history.push(`/adverts/${createdAdvertId}`);
+    const createdAdvert = await api.adverts.createAdvert(advert);
+    dispatch(advertsCreateSuccess(createdAdvert));
+    history.push(`/adverts/${createdAdvert.id}`);
   } catch (error) {
     dispatch(advertsCreateFailure(error));
   }
