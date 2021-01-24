@@ -17,7 +17,7 @@ const App = () => (
     <PrivateRoute path="/adverts/new" exact component={NewAdvertPage} />
     <PrivateRoute path="/adverts/:id" exact component={AdvertPage} />
     <Route path="/404" exact>
-      {NotFoundPage}
+      <NotFoundPage />
     </Route>
     <Route>
       <Redirect to="/404" />
